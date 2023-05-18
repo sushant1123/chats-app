@@ -67,8 +67,7 @@ const ChatHeader = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const theme = useTheme();
 
-  const [conversationMenuAnchorEl, setConversationMenuAnchorEl] =
-    React.useState(null);
+  const [conversationMenuAnchorEl, setConversationMenuAnchorEl] = React.useState(null);
   const openConversationMenu = Boolean(conversationMenuAnchorEl);
   const handleClickConversationMenu = (event) => {
     setConversationMenuAnchorEl(event.currentTarget);
@@ -82,8 +81,7 @@ const ChatHeader = () => {
       p={2}
       width={"100%"}
       sx={{
-        backgroundColor:
-          theme.palette.mode === "light" ? "#F8FAFF" : theme.palette.background,
+        backgroundColor: theme.palette.mode === "light" ? "#F8FAFF" : theme.palette.background,
         boxShadow: "0px 0px 2px rgba(0, 0, 0, 0.25)",
       }}
     >
@@ -134,9 +132,7 @@ const ChatHeader = () => {
           <Divider orientation="vertical" flexItem />
           <IconButton
             id="conversation-positioned-button"
-            aria-controls={
-              openConversationMenu ? "conversation-positioned-menu" : undefined
-            }
+            aria-controls={openConversationMenu ? "conversation-positioned-menu" : undefined}
             aria-haspopup="true"
             aria-expanded={openConversationMenu ? "true" : undefined}
             onClick={handleClickConversationMenu}
