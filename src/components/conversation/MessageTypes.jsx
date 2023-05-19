@@ -17,7 +17,7 @@ export const TimeLine = ({ chat }) => {
   );
 };
 
-export const TextMessage = ({ chat }) => {
+export const TextMessage = ({ chat, menu }) => {
   const theme = useTheme();
 
   return (
@@ -37,12 +37,12 @@ export const TextMessage = ({ chat }) => {
         </Typography>
       </Box>
 
-      <MessageOptions />
+      {menu && <MessageOptions />}
     </Stack>
   );
 };
 
-export const MediaMessage = ({ chat }) => {
+export const MediaMessage = ({ chat, menu }) => {
   const theme = useTheme();
 
   return (
@@ -72,12 +72,12 @@ export const MediaMessage = ({ chat }) => {
         </Stack>
       </Box>
 
-      <MessageOptions />
+      {menu && <MessageOptions />}
     </Stack>
   );
 };
 
-export const ReplyMessage = ({ chat }) => {
+export const ReplyMessage = ({ chat, menu }) => {
   const theme = useTheme();
 
   return (
@@ -110,12 +110,12 @@ export const ReplyMessage = ({ chat }) => {
         </Stack>
       </Box>
 
-      <MessageOptions />
+      {menu && <MessageOptions />}
     </Stack>
   );
 };
 
-export const LinkMessage = ({ chat }) => {
+export const LinkMessage = ({ chat, menu }) => {
   const theme = useTheme();
 
   return (
@@ -169,12 +169,12 @@ export const LinkMessage = ({ chat }) => {
         </Stack>
       </Box>
 
-      <MessageOptions />
+      {menu && <MessageOptions />}
     </Stack>
   );
 };
 
-export const DocumentMessage = ({ chat }) => {
+export const DocumentMessage = ({ chat, menu }) => {
   const theme = useTheme();
 
   return (
@@ -215,7 +215,7 @@ export const DocumentMessage = ({ chat }) => {
         </Stack>
       </Box>
 
-      <MessageOptions />
+      {menu && <MessageOptions />}
     </Stack>
   );
 };

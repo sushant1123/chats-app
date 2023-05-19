@@ -4,7 +4,7 @@ import { dispatch } from "../store";
 const initialState = {
   sidebar: {
     open: false,
-    type: "CONTACT", // "Contact", "Starred", "Shared "
+    type: "CONTACT", // "Contact", "Starred", "Shared"
   },
 };
 
