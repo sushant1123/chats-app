@@ -32,7 +32,7 @@ const Group = () => {
             </Stack>
 
             <Stack direction="row" alignItems="center" justifyContent="space-between">
-              <Typography variant="subtitle2" component={Link}>
+              <Typography variant="subtitle2" component={Link} sx={{ cursor: "pointer" }}>
                 Create New Group
               </Typography>
               <IconButton>
