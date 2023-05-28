@@ -1,34 +1,35 @@
-import { useState } from "react";
-import * as Yup from "yup";
+import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { Link, Stack, InputAdornment, IconButton, Alert } from "@mui/material";
+import { EyeSlash, Eye } from "phosphor-react";
+import { LoadingButton } from "@mui/lab";
+import * as Yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Link, Stack, Alert, IconButton, InputAdornment } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
-import { Eye, EyeSlash } from "phosphor-react";
-import { useDispatch, useSelector } from "react-redux";
-
 import FormProvider, { RHFTextField } from "../../components/hook-form";
-// import { LoginUser } from "../../redux/slices/auth";
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   // const { isLoading } = useSelector((state) => state.auth);
   let isLoading = false;
 
-  const LoginSchema = Yup.object().shape({
+  const RegisterSchema = Yup.object().shape({
+    firstName: Yup.string().required("First Name is required"),
+    lastName: Yup.string().required("Last Name is required"),
     email: Yup.string().required("Email is required").email("Email must be a valid email address"),
     password: Yup.string().required("Password is required"),
   });
 
   const defaultValues = {
+    firstName: "",
+    lastName: "",
     email: "demo@chatsapp.com",
     password: "demo1234",
   };
 
   const methods = useForm({
-    resolver: yupResolver(LoginSchema),
+    resolver: yupResolver(RegisterSchema),
     defaultValues,
   });
 
@@ -57,8 +58,13 @@ const LoginForm = () => {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={3}>
+      <Stack spacing={3} mb={4}>
         {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
+
+        <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+          <RHFTextField name="firstName" label="First Name" />
+          <RHFTextField name="lastName" label="Last Name" />
+        </Stack>
 
         <RHFTextField name="email" label="Email address" />
 
@@ -69,25 +75,13 @@ const LoginForm = () => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword((prev) => !prev)} edge="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
                   {showPassword ? <Eye /> : <EyeSlash />}
                 </IconButton>
               </InputAdornment>
             ),
           }}
         />
-      </Stack>
-
-      <Stack alignItems="flex-end" sx={{ my: 2 }}>
-        <Link
-          component={RouterLink}
-          to="/auth/reset-password"
-          variant="body2"
-          color="inherit"
-          underline="always"
-        >
-          Forgot password?
-        </Link>
       </Stack>
 
       <LoadingButton
@@ -106,10 +100,10 @@ const LoginForm = () => {
           },
         }}
       >
-        Login
+        Create Account
       </LoadingButton>
     </FormProvider>
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
