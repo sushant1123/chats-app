@@ -45,13 +45,38 @@ const userSchema = new mongoose.Schema(
     passwordReseTokenExpiry: {
       type: Date,
     },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
+    otp: {
+      type: Number,
+    },
+    otp_expiry_time: {
+      type: Date,
+    },
   },
   { timestamps: true }
 );
 
+// to validate the hashed password
 userSchema.methods.validatePassword = async function (currentPassword, userPassword) {
   return await bcrypt.compare(currentPassword, userPassword);
 };
+
+// to validate the hashed OTP
+userSchema.methods.validateOTP = async function (currentOTP, userOTP) {
+  return await bcrypt.compare(currentOTP, userOTP);
+};
+
+// before saving the OTP, hash it using bcrypt and then store it.
+userSchema.pre("save", async function (next) {
+  // only run this functino when otp is modified.
+  if (!this.isModified("otp")) return next();
+
+  this.otp = await bcrypt.hash(this.otp, 12);
+  next();
+});
 
 const UserModel = mongoose.model("User", userSchema);
 
