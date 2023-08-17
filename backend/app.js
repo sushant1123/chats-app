@@ -6,6 +6,8 @@ const xss = require("xss"); // to filter input from users to prevent XSS attacks
 const cors = require("cors"); // enable CORS with various options.
 const mongoSanitize = require("express-mongo-sanitize"); // setting HTTP response headers to secure the apps.
 
+const routes = require("./routes/index.route"); // setting HTTP response headers to secure the apps.
+
 const app = express();
 
 const limiter = rateLimit({
@@ -33,6 +35,11 @@ app.use(xss);
 app.use(helmet());
 app.use(mongoSanitize());
 app.use("/talk", limiter); // Apply the rate limiting middleware to all requests
+
+//  -------------------------------------------------------------------------------------------------------
+// route
+
+app.use("/api/v1", routes);
 
 //  -------------------------------------------------------------------------------------------------------
 module.exports = app;

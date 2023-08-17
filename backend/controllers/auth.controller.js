@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const otpGenerator = require("otp-generator");
 const crypto = require("crypto");
 
-const User = require("../models/user.model");
+const UserModel = require("../models/user.model");
 const { filterObject } = require("../utils/filterObj");
 
 const getToken = (userId) => {
@@ -13,7 +13,7 @@ exports.register = async (req, res, next) => {
   try {
     const { firstName, lastName, email, password } = req.body;
 
-    const existing_user = await User.findOne({ email: email });
+    const existing_user = await UserModel.findOne({ email: email });
 
     const filteredBody = filterObject(req.body, "firstName", "lastName", "password", "email");
 
@@ -22,7 +22,7 @@ exports.register = async (req, res, next) => {
         .status(400)
         .json({ status: "error", message: "User email already in use. Please login." });
     } else if (existing_user._id) {
-      const updatedOne = await User.findOneAndUpdate(
+      const updatedOne = await UserModel.findOneAndUpdate(
         { email: email },
         { ...filteredBody },
         { new: true, validateModifiedOnly: true }
@@ -31,7 +31,7 @@ exports.register = async (req, res, next) => {
       req.userId = existing_user._id;
       next();
     } else {
-      const newUser = await User.create(filteredBody);
+      const newUser = await UserModel.create(filteredBody);
       req.userId = existing_user._id;
       // generate OTP, send emai l to user
       next();
@@ -52,7 +52,7 @@ exports.login = async (req, res, next) => {
         .json({ status: "error", message: "Both Email and Password are required." });
     }
 
-    const user = await User.findOne({ email: email }).select("+password");
+    const user = await UserModel.findOne({ email: email }).select("+password");
 
     if (!user || (await user.validatePassword(password, user.password))) {
       return res.status(400).json({ status: "error", message: "Email or Password is incorrect." });
@@ -86,7 +86,7 @@ exports.generateOTP = async (req, res, next) => {
     const otp_expiry_time = Date.now() + 10 * 60 * 1000; // 10 mins
 
     // update User Details
-    await User.findByIdAndUpdate(userId, {
+    await UserModel.findByIdAndUpdate(userId, {
       otp: new_otp,
       otp_expiry_time,
     });
@@ -105,7 +105,7 @@ exports.verifyOTP = async (req, res, next) => {
     const { email, otp } = req.body;
 
     // update User Details
-    const user = await User.findOneAndUpdate(
+    const user = await UserModel.findOneAndUpdate(
       { email: email },
       {
         otp: new_otp,
@@ -146,7 +146,7 @@ exports.forgetPassword = async (req, res, next) => {
 
   const { email } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await UserModel.findOne({ email });
 
   if (!user) {
     return res.status(400).json({ status: "error", message: "Email not found!" });
@@ -185,7 +185,7 @@ exports.resetPassword = async (req, res, next) => {
     const { password, passwordConfirm } = req.body;
     const hashedToken = crypto.createHash("sha256").update(req.params.token).digest("hex");
 
-    const user = await User.findOne({
+    const user = await UserModel.findOne({
       passwordReseToken: hashedToken,
       passwordReseTokenExpiry: { $gt: Date.now() },
     });
