@@ -39,6 +39,7 @@ app.use("/talk", limiter); // Apply the rate limiting middleware to all requests
 //  -------------------------------------------------------------------------------------------------------
 // route
 
+app.get("/health-check", (req, res) => res.status(200).json({ message: "In health-check app" }));
 app.use("/api/v1", routes);
 
 //  -------------------------------------------------------------------------------------------------------
